@@ -18,7 +18,7 @@ path='/weather'
 node app.js $port $path
 ```
 
-To test the logger, execute the following script. It simulates data generation for temperature and humidity using cURL:
+To test the logger, execute the following script (replace `some_api_key` with the API key you set). It simulates data generation for temperature and humidity using cURL:
 
 ```bash
 while true; do
@@ -26,7 +26,7 @@ while true; do
     humidity=$(shuf -i 85-100 -n 1)
     curl -X POST \
         -H "Content-Type: application/json" \
-        -H "x-api-key: aVvDwosPXGAhNMUKYZ8e76XsbL2g7NvkFBKqhpnwV5qu2ka7CyPvAKZtFwxxCLmMUfyEV9tgXTww63qwi3VDjhcLByCtVe8houVDvEER7hrTndMzQnkV4aciaGd2ywtN" \
+        -H "x-api-key: some_api_key" \
         -d '{"Temperature (ºC)": '"$temperature"', "Humidity (%)": '"$humidity"'}' \
         https://dnsousa.com/weather/log
     sleep 0.01
