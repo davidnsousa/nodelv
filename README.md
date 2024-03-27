@@ -57,22 +57,32 @@ Output:
 }
 ```
 
-2. Get the  log data (5 lines) with python using `requests` and `tabulate`:
+2. Get the  log data (last 5 lines) with python using `requests` and `tabulate` and plot it with `termplotlib`:
 
 ```python
 import json
 import requests
 from tabulate import tabulate
+import termplotlib as tpl
+import datetime
 
+# Get json_log
 response = requests.get("http://localhost:3000/weather/json_log")
-if response.status_code == 200:
-    data = [json.loads(line) for line in response.text.splitlines()[-5:]]
-    if data:
-        keys = list(data[0].keys())
-        table = []
-        for entry in data:
-            table.append([entry[key] for key in keys])
-        print(tabulate(table, headers=keys, tablefmt="grid"))
+data = [json.loads(line) for line in response.text.splitlines()[-5:]]
+
+# Create table
+keys = list(data[0].keys())
+table = []
+for entry in data:
+		table.append([entry[key] for key in keys])
+print(tabulate(table, headers=keys, tablefmt="grid"))
+
+# Plot data
+timestamps = [entry["timestamp"] - 1711519860000  for entry in data]
+temperatures = [entry["Temperature (ºC)"] for entry in data]
+fig = tpl.figure()
+fig.plot(timestamps, temperatures, width=50, height=15)
+fig.show()
 ```
 Output:
 
@@ -90,4 +100,18 @@ Output:
 +--------------------+----------------+---------------+
 |                 28 |             89 | 1711519862475 |
 +--------------------+----------------+---------------+
+  30 +----------------------------------------+
+     |       **  *                            |
+  29 |     **     *                           |
+     |   **        *                          |
+  28 | **           *                     **  |
+     |               *                ****    |
+     |               *             ***        |
+  27 |                *          **           |
+     |                 *       **             |
+  26 |                  *    **               |
+     |                   * **                 |
+  25 +----------------------------------------+
+    600 800 100 120 1400 160 180 200 220 240 2600
+
 ```
