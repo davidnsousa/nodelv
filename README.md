@@ -34,7 +34,9 @@ while true; do
     sleep 0.01
 done
 ```
-Once the logger is running, navigate to `localhost:3000/weather` in your web browser to view the live data.
+Once the logger is running, navigate to `http://localhost:3000/weather` in your web browser to view the live data.
+
+![alt text](https://i.imgur.com/0hfAyvI.png)
 
 ## Go beyond
 
