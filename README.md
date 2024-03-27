@@ -1,6 +1,6 @@
 # Node.js logger an viewer
 
-Node.js application to log and  view real-time data. It logs JSON data to `public/json_log`, which is automatically created if it doesn't exist.
+Node.js application to log and view real-time data on a local or remote server. The app logs JSON data to `public/json_log`, which is automatically created if it doesn't exist.
 
 Useful for citizen science projects (or other purposes) that require sensor data logging for monitoring real-time measures of temperature, humidity, air quality, etc.
 
@@ -38,7 +38,26 @@ Once the logger is running, navigate to `localhost:3000/weather` in your web bro
 
 ## Go beyond
 
-The log file and the most recent log entry are available at `http://localhost:3000/weather/json_log` and `http://localhost:3000/weather/json_data` respectively. This is useful for scripting data vizualization. Here is a simple example with python using `requests` and `tabulate`:
+The log file and the most recent log entry are available at `http://localhost:3000/weather/json_log` and `http://localhost:3000/weather/json_data` respectively. This is useful for scripting data vizualization. 
+
+### Examples
+
+1. Get the most recent log entry in bash using `jq`:
+
+```bash
+curl -s http://localhost:3000/weather/json_data | jq .
+```
+Output:
+
+```bash
+{
+  "Temperature (ºC)": 28,
+  "Humidity (%)": 89,
+  "timestamp": 1711519862475
+}
+```
+
+2. Get the  log data (5 lines) with python using `requests` and `tabulate`:
 
 ```python
 import json
