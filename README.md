@@ -28,7 +28,7 @@ while true; do
         -H "Content-Type: application/json" \
         -H "x-api-key: some_api_key" \
         -d '{"Temperature (ºC)": '"$temperature"', "Humidity (%)": '"$humidity"'}' \
-        https://dnsousa.com/weather/log
+        http://localhost:3000/weather/log
     sleep 0.01
 done
 ```
