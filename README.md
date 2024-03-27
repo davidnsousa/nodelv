@@ -1,6 +1,8 @@
 # Node.js logger an viewer
 
-This Node.js application serves as a logging tool and real-time data viewer. It logs JSON data to `public/json_log`, which is automatically created if it doesn't exist.
+Node.js application to log and  view real-time data. It logs JSON data to `public/json_log`, which is automatically created if it doesn't exist.
+
+Useful for citizen science projects (or other purposes) that require sensor data logging for monitoring real-time measures of temperature, humidity, air quality, etc.
 
 ## Usage example
 
@@ -32,6 +34,41 @@ while true; do
     sleep 0.01
 done
 ```
-
 Once the logger is running, navigate to `localhost:3000/weather` in your web browser to view the live data.
 
+## Go beyond
+
+The log file and the most recent log entry are available at `http://localhost:3000/weather/json_log` and `http://localhost:3000/weather/json_data` respectively. This is useful for scripting data vizualization. Here is a simple example with python using `requests` and `tabulate`:
+
+```python
+import json
+import requests
+from tabulate import tabulate
+
+response = requests.get("http://localhost:3000/weather/json_log")
+if response.status_code == 200:
+    data = [json.loads(line) for line in response.text.splitlines()[-5:]]
+    if data:
+        keys = list(data[0].keys())
+        table = []
+        for entry in data:
+            table.append([entry[key] for key in keys])
+        print(tabulate(table, headers=keys, tablefmt="grid"))
+```
+Output:
+
+```
++--------------------+----------------+---------------+
+|   Temperature (ºC) |   Humidity (%) |     timestamp |
++====================+================+===============+
+|                 28 |             90 | 1711519860687 |
++--------------------+----------------+---------------+
+|                 30 |             83 | 1711519861147 |
++--------------------+----------------+---------------+
+|                 25 |             90 | 1711519861604 |
++--------------------+----------------+---------------+
+|                 27 |             83 | 1711519861974 |
++--------------------+----------------+---------------+
+|                 28 |             89 | 1711519862475 |
++--------------------+----------------+---------------+
+```
