@@ -1,9 +1,3 @@
----
-title: Node.js logger an viewer
-created: '2024-03-27T04:35:02.897Z'
-modified: '2024-03-27T04:59:04.365Z'
----
-
 # Node.js logger an viewer
 
 This Node.js application serves as a logging tool and real-time data viewer. It logs JSON data to `public/json_log`, which is automatically created if it doesn't exist.
