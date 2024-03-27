@@ -1,4 +1,4 @@
-# Node.js logger an viewer
+# Node.js data logger an viewer
 
 Node.js application to log and view real-time data on a local or remote server. The app logs JSON data to `public/json_log`, which is automatically created if it doesn't exist.
 
@@ -59,7 +59,7 @@ Output:
 }
 ```
 
-2. Get the  log data (last 5 lines) with python using `requests` and `tabulate` and plot it with `termplotlib`:
+2. Get the  log data (last 5 lines) with python using `requests` and `tabulate` and plot it with `termplotlib` (or any other fancy  alternatives):
 
 ```python
 import json
