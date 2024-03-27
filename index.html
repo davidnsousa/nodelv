@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>Log data</title>
+<style>
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.container {
+    text-align: center;
+}
+table {
+    border-collapse: separate;
+    border-spacing: 2px;
+    width: 100%;
+}
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+td:first-child {
+    background-color: #BCE4E4;
+}
+td:not(:first-child) {
+    background-color: #D5EEEE;
+}
+td {
+    border: none;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <table id="mostRecentLogTable"></table>
+    <p style="font-size: 12px;"><span id="mostRecentLogTime"></span></p>
+    <a href="json_log" id="downloadJsonLink" style="font-size: 11px;">Get JSON data</a>
+    <br>
+    <a href="https://github.com/davidnsousa/nodelv" style="color: black;"><i class="fa fa-github-square fa-2x"></i></a>
+</div>
+<script>
+
+function data2table(dataEntry) {
+	mostRecentLogTable = document.getElementById("mostRecentLogTable");
+	mostRecentLogTable.innerHTML = '';
+	keys = Object.keys(dataEntry);
+	body = document.createElement('tbody');
+	keys.forEach(key => {
+		if (key !== "timestamp") {
+			row = body.insertRow();
+			cellKey = row.insertCell();
+			cellValue = row.insertCell();
+			cellKey.textContent = key;
+			cellValue.textContent = dataEntry[key];
+		}
+	});
+	mostRecentLogTable.appendChild(body);
+}
+
+function timestamp2date(ts) {
+	date = new Date(ts);
+	year = date.getFullYear();
+	month = date.getMonth() + 1;
+	day = date.getDate();
+	hours = date.getHours();
+	minutes = "0" + date.getMinutes();
+	return day + '/' + month + '/' + year + ' ' + hours + ':' + minutes.substr(-2);
+}
+
+function fetchMostRecentLog() {
+	fetch(window.location + 'json_data')
+		.then(response => response.json())
+		.then(data => {
+			mostRecentLog=data;
+			data2table(mostRecentLog);
+			if (mostRecentLog.State !=  'Waiting for data...') {
+				mostRecentLogTime = timestamp2date(mostRecentLog.timestamp);
+				document.getElementById('mostRecentLogTime').innerText = mostRecentLogTime;
+				document.getElementById('downloadJsonLink').style.display = 'block';
+			} else {
+				document.getElementById('mostRecentLogTime').innerText = '';
+				document.getElementById('downloadJsonLink').style.display = 'none';
+			}
+		})
+}
+
+function start() {
+	fetchMostRecentLog();
+}
+
+function periodicFetch() {
+	setInterval(() => {
+		fetchMostRecentLog()
+	}, 1000);
+}
+
+start();
+periodicFetch();
+
+</script>
+
+</body>
+</html>
